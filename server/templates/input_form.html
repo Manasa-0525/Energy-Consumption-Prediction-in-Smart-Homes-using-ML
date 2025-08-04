@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Energy Input Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url("{% static 'images/bg_input.jpg' %}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding: 40px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .appliance-section {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f2f2;
+      border-radius: 10px;
+    }
+
+    .appliance-inputs {
+      display: none;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+  <script>
+  // Hide all appliance inputs on page load
+  window.onload = function () {
+    const appliances = {{ appliance_list|safe }};
+    appliances.forEach(app => {
+      const section = document.getElementById(app + "_inputs");
+      if (section) {
+        section.style.display = "none";
+      }
+    });
+  };
+
+  function toggleInputs(appliance) {
+    const checkbox = document.getElementById(appliance);
+    const section = document.getElementById(appliance + "_inputs");
+
+    if (checkbox.checked) {
+      section.style.display = "block";
+    } else {
+      section.style.display = "none";
+    }
+  }
+</script>
+
+</head>
+<body>
+  <div class="container">
+    <h2>Enter Smart Home Energy Details</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <label>Room Temperature (°C):</label>
+      <input type="number" name="temperature" step="0.1" required>
+
+      <label>Humidity (%):</label>
+      <input type="number" name="humidity" step="0.1" required>
+
+      <label>Number of People in Home:</label>
+      <input type="number" name="persons" required>
+
+      <label>Monthly Energy Target (kWh):</label>
+      <input type="number" name="monthly_target" step="0.1" required>
+
+      <label>Select Appliances Used:</label>
+      {% for appliance in appliance_list %}
+        <div class="appliance-section">
+          <input type="checkbox" id="{{ appliance }}" name="{{ appliance }}" value="yes" onclick="toggleInputs('{{ appliance }}')">
+          <label for="{{ appliance }}">{{ appliance|title }}</label>
+          <div id="{{ appliance }}_inputs" class="appliance-inputs">
+            <label>Daily Usage (hours):</label>
+            <input type="number" name="{{ appliance }}_usage" step="0.1">
+            <label>Number of Days:</label>
+            <input type="number" name="{{ appliance }}_days">
+            <label>Count:</label>
+            <input type="number" name="{{ appliance }}_count">
+          </div>
+        </div>
+      {% endfor %}
+
+      <button type="submit">Predict</button>
+    </form>
+  </div>
+</body>
+</html>
