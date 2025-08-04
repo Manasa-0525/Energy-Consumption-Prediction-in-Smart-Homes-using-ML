@@ -16,11 +16,11 @@ Visualization: matplotlib, seaborn
 Database: SQLite (can be scaled to PostgreSQL)
 
 💡 Inputs
-Temperature
-Humidity
-Day of the week
-Time of day
-Monthly energy target (kWh)
+Temperature,
+Humidity,
+Day of the week,
+Time of day,
+Monthly energy target (kWh),
 Optional appliance usage details
 
 🎯 Objective
