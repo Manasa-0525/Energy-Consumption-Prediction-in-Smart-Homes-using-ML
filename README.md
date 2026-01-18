@@ -12,7 +12,7 @@ This project is a full-stack web application designed to predict energy consumpt
 Frontend: HTML, CSS, Bootstrap
 Backend: Python, Django
 ML Libraries: scikit-learn, pandas, NumPy
-Visualization: matplotlib, seaborn
+Visualization: matplotlib, seaborn 
 Database: SQLite (can be scaled to PostgreSQL)
 
 💡 Inputs
